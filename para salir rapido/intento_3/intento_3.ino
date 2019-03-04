@@ -9,10 +9,17 @@ LiquidCrystal_I2C lcd(0x27, 16, 2); // set the LCD address to 0x27 for a 16 char
 #define sensorTierra1 A0
 #define sensorTierra2 A1
 #define extractor 13
-#define luzLED 12
+#define caloventor 12
 #define bombaAgua 11
-#define unoMas 10
+#define humidificador 10
 DHT dht(DHTPIN, DHTTYPE);
+
+/*ESTADO APARATOS RELAY*/
+bool estadoExtractor = false;
+bool estadoCaloventor = false;
+bool estadoBombaAgua = false;
+bool estadoHumidificador = false;
+
 
 /****************************************BOTONES**********************************************/
 const int  Up_buttonPin   = 3;    // the pin that the pushbutton is attached to
@@ -38,6 +45,7 @@ bool SPress = false;//cambia de valor cuando se presiona SELECT
 /**************************BANDERAS*****************************/
 bool hayEEPROM = false;/***modo debug*** false para pasar por configuracion de usuario, true para ver hum y temp******************************************************************************************************************/
 bool bienvenidaState = false;
+bool mostrarTempHumInicialState = false;
 bool sinMacetas = true;
 bool sinLitrosMacetas = true;
 
@@ -54,6 +62,7 @@ int tempAhora, humAhora, promTemps, promHums = 0;
 
 /*DATOS TIERRA*/
 int humedadTierra1Ahora1, humedadTierra1Ahora2, promHumedadTierraAhora = 0;
+int contadorChequearTierra = 10;
 
 /*DATOS EEPROM*/
 int espaciosMemoria = 0;
@@ -104,23 +113,34 @@ int humMaxAUsar, humMinAUsar, tempMaxAUsar, tempMinAUsar = 0;
 /*SEGUNDOS QUE ACTIVO BOMBA DE RIEGO*/
 int segundosBombaAguaActivada = 0;
 
+/*SUMAS Y PROMEDIO DE TEMPS Y HUMS*/
+int sumaDeTemps, sumaDeHums, promDeTemps, promDeHums = 0;
+
+
+
 void setup() {
   Serial.begin(9600);
+
+  /*BOTONES*/
   pinMode( Up_buttonPin , INPUT_PULLUP);
   pinMode( Down_buttonPin , INPUT_PULLUP);
   pinMode( Select_buttonPin , INPUT_PULLUP);
+
+  /*SENSORES TIERRA*/
   pinMode(sensorTierra1, INPUT);
   pinMode(sensorTierra2, INPUT);
 
+  /*RELES*/
   pinMode (extractor, OUTPUT);
   digitalWrite(extractor, LOW);
-  pinMode (luzLED, OUTPUT);
-  digitalWrite(luzLED, LOW);
+  pinMode (caloventor, OUTPUT);
+  digitalWrite(caloventor, LOW);
   pinMode (bombaAgua, OUTPUT);
   digitalWrite(bombaAgua, LOW);
-  pinMode (unoMas, OUTPUT);
-  digitalWrite(unoMas, LOW);
+  pinMode (humidificador, OUTPUT);
+  digitalWrite(humidificador, LOW);
 
+  /*CONFIGURACIONES BASICAS*/
   lcd.init();
   lcd.backlight();
   dht.begin();
@@ -132,6 +152,7 @@ void loop() {
     bienvenida();
   }
 
+  /*****************CHEQUEO DATOS DE EEPROM********************/
   if (hayEEPROM == false) { //chequear si hay datos almacenados en EEPROM
     int cantidadMacetas = cantidadDeMacetas();
     int cantLitrosMacetas = litrosMacetas();
@@ -139,23 +160,18 @@ void loop() {
     hayEEPROM = true;
     mostrar(cantidadMacetas, cantLitrosMacetas, etapaPlanta);
     setearValores();
-    Serial.println(/*******************asdasdasd*****************/);
-    Serial.println(humMaxAUsar);
-    Serial.println(humMinAUsar);
-    Serial.println(tempMaxAUsar);
-    Serial.println(tempMinAUsar);
-    Serial.println(etapaPlanta);
-    Serial.println(/****************asdasdasd********************/);
-    
-    
   }
-  
-  tempAhora = sensarTemperatura();
-  humAhora = sensarHumedad();
+/**********MUESTRO VALORES AL INICIAR***********/
+  if (mostrarTempHumInicialState == false) {
+    mostrarTempHumInicial();
+  }
+  /*****************BUCLE CORE*****************/
+  checkTemp();
+  checkHum();
+  if (contadorChequearTierra == 10) {
+    checkTierra();
+  }
+  contadorChequearTierra++;
 
-  mostrarTemperatura(tempAhora);
-  mostrarHumedad(humAhora);
   
-  //sensarHumMacetas();
-  //hayQueRegar();
 }

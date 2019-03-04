@@ -12,26 +12,26 @@ int setearValores(){
   }
 
   if(etapaPlanta == 2){
-    humMaxAUsar = humedadMaxStandardPlantin;
-    humMinAUsar = humedadMinStandardPlantin;
-    tempMaxAUsar = tempMaxStandardPlantin;
-    tempMinAUsar = tempMinStandardPlantin;
+    humMaxAUsar = humedadMaxStandardVege;
+    humMinAUsar = humedadMinStandardVege;
+    tempMaxAUsar = tempMaxStandardVege;
+    tempMinAUsar = tempMinStandardVege;
     return humMaxAUsar, humMinAUsar, tempMaxAUsar, tempMinAUsar;
   }
 
   if(etapaPlanta == 3){
-    humMaxAUsar = humedadMaxStandardPlantin;
-    humMinAUsar = humedadMinStandardPlantin;
-    tempMaxAUsar = tempMaxStandardPlantin;
-    tempMinAUsar = tempMinStandardPlantin;
+    humMaxAUsar = humedadMaxStandardFlora;
+    humMinAUsar = humedadMinStandardFlora;
+    tempMaxAUsar = tempMaxStandardFlora;
+    tempMinAUsar = tempMinStandardFlora;
     return humMaxAUsar, humMinAUsar, tempMaxAUsar, tempMinAUsar;
   }
 
   if(etapaPlanta == 4){
-    humMaxAUsar = humedadMaxStandardPlantin;
-    humMinAUsar = humedadMinStandardPlantin;
-    tempMaxAUsar = tempMaxStandardPlantin;
-    tempMinAUsar = tempMinStandardPlantin;
+    humMaxAUsar = humedadMaxStandardFloraT;
+    humMinAUsar = humedadMinStandardFloraT;
+    tempMaxAUsar = tempMaxStandardFloraT;
+    tempMinAUsar = tempMinStandardFloraT;
     return humMaxAUsar, humMinAUsar, tempMaxAUsar, tempMinAUsar;
   }
 }
