@@ -36,15 +36,17 @@ bool bPress = false;//cambia de valor cuando se presiona UP o DOWN
 bool SPress = false;//cambia de valor cuando se presiona SELECT
 
 /**************************BANDERAS*****************************/
-bool hayEEPROM = true;/***modo debug*** false para pasar por configuracion de usuario, true para ver hum y temp******************************************************************************************************************/
+bool hayEEPROM = false;/***modo debug*** false para pasar por configuracion de usuario, true para ver hum y temp******************************************************************************************************************/
 bool bienvenidaState = false;
 bool sinMacetas = true;
 bool sinLitrosMacetas = true;
 
 /*INICIALIZO VARIABLES DEFAULT PARA QUE INGRESE EL USUARIO*/
 bool etapaPlantaStatus = false;
-int cantidadMacetas, cantLitros, etapaPlanta = 0;
-String stringEtapaPlanta = "";
+int cantidadMacetas, cantLitros, etapaPlanta = 0 ;
+String stringEtapaPlanta = "" ;
+String stringCantidadMacetas = "" ;
+String stringCantLitros = "" ;
 
 /*DATOS TEMPERATURA*/
 String temperaturaLCD, humedadLCD = "";
@@ -60,18 +62,18 @@ int espaciosMemoria = 0;
 /*DEFAULT*/
 const int humedadMaxStandardPlantin = 70;
 const int humedadMinStandardPlantin = 65;
-const int tempMaxStandardPlantin = 25;
-const int tempMinStandardPlantin = 20;
+const int tempMaxStandardPlantin = 24;/*25*/
+const int tempMinStandardPlantin = 22;/*20*/
 
 /*USUARIO*/
 int humedadMaxUsuarioPlantin, humedadMinUsuarioPlantin, tempMaxUsuarioPlantin, tempMinUsuarioPlantin = 0;
 
 /**********************************MINIMA Y MAXIMA PARA VEGETATIVO*******************************/
 /*DEFAULT*/
-const int humedadMaxStandardVege = 70;
-const int humedadMinStandardVege = 40;
-const int tempMaxStandardVege = 28;
-const int tempMinStandardVege = 22;
+const int humedadMaxStandardVege = 60;
+const int humedadMinStandardVege = 50;
+const int tempMaxStandardVege = 26;/*28*/
+const int tempMinStandardVege = 24;/*22*/
 
 /*USUARIO*/
 int humedadMaxUsuarioVege, humedadMinUsuarioVege, tempMaxUsuarioVege, tempMinUsuarioVege = 0;
@@ -80,8 +82,8 @@ int humedadMaxUsuarioVege, humedadMinUsuarioVege, tempMaxUsuarioVege, tempMinUsu
 /*DEFAULT*/
 const int humedadMaxStandardFlora = 50;
 const int humedadMinStandardFlora = 40;
-const int tempMaxStandardFlora = 26;
-const int tempMinStandardFlora = 20;
+const int tempMaxStandardFlora = 24;/*26*/
+const int tempMinStandardFlora = 22;/*20*/
 
 /*USUARIO*/
 int humedadMaxUsuarioFlora, humedadMinUsuarioFlora, tempMaxUsuarioFlora, tempMinUsuarioFlora = 0;
@@ -90,8 +92,8 @@ int humedadMaxUsuarioFlora, humedadMinUsuarioFlora, tempMaxUsuarioFlora, tempMin
 /*DEFAULT*/
 const int humedadMaxStandardFloraT = 40;
 const int humedadMinStandardFloraT = 30;
-const int tempMaxStandardFloraT = 24;
-const int tempMinStandardFloraT = 18;
+const int tempMaxStandardFloraT = 22;/*24*/
+const int tempMinStandardFloraT = 20;/*18*/
 
 /*USUARIO*/
 int humedadMaxUsuarioFloraT, humedadMinUsuarioFloraT, tempMaxUsuarioFloraT, tempMinUsuarioFloraT = 0;
@@ -124,24 +126,32 @@ void loop() {
     bienvenida();
   }
   //datosEEPROM();
-  
+
   //traerEEPROM();
-  
+
   if (hayEEPROM == false) { //chequear si hay datos almacenados en EEPROM
-    cantidadDeMacetas();
-    litrosMacetas();
-    etapaDePlanta();
+    int cantidadMacetas = cantidadDeMacetas();
+    int cantLitrosMacetas = litrosMacetas();
+    int etapaPlanta = etapaDePlanta();
     hayEEPROM = true;
+
+    mostrar(cantidadMacetas, cantLitrosMacetas, etapaPlanta);
+
+    //setearValores();
+
   }
 
   tempAhora = sensarTemperatura();
   humAhora = sensarHumedad();
-  
+
   mostrarTemperatura(tempAhora);
   mostrarHumedad(humAhora);
 
-  
-  
+
+
+
+
+
   //sensarHumMacetas();
   //hayQueRegar();
 }

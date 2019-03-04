@@ -123,20 +123,24 @@ void loop() {
   if (bienvenidaState == false) {
     bienvenida();
   }
-
-  
   //datosEEPROM();
   
-  while (hayEEPROM == false) { //chequear si hay datos almacenados en EEPROM
+  //traerEEPROM();
+  
+  if (hayEEPROM == false) { //chequear si hay datos almacenados en EEPROM
     cantidadDeMacetas();
     litrosMacetas();
     etapaDePlanta();
     hayEEPROM = true;
   }
+
+  tempAhora = sensarTemperatura();
+  humAhora = sensarHumedad();
   
-  sensarTempYHumAire();
   mostrarTemperatura(tempAhora);
   mostrarHumedad(humAhora);
+
+  
   
   //sensarHumMacetas();
   //hayQueRegar();
