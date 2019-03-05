@@ -5,7 +5,7 @@ int cantidadDeMacetas() {
   lcd.print("Cant Macetas?");
   int cantidadMacetas = botones();
 
-  if (!cantidadMacetas == 0) {
+  if (!cantidadMacetas <= 0) {
     lcd.clear();
     lcd.print(cantidadMacetas);
     delay(1000);

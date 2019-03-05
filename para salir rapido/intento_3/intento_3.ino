@@ -62,7 +62,11 @@ int tempAhora, humAhora, promTemps, promHums = 0;
 
 /*DATOS TIERRA*/
 int humedadTierra1Ahora1, humedadTierra1Ahora2, promHumedadTierraAhora = 0;
-int contadorChequearTierra = 10;
+int contadorChequearTierra = 0;
+int contadorLecturas = 0;
+int humedadTierraHist1 = 0;
+int humedadTierraHist2 = 0;
+int promHumSensores = 0;
 
 /*DATOS EEPROM*/
 int espaciosMemoria = 0;
@@ -153,7 +157,7 @@ void loop() {
   }
 
   /*****************CHEQUEO DATOS DE EEPROM********************/
-  if (hayEEPROM == false) { //chequear si hay datos almacenados en EEPROM
+  if (hayEEPROM == true) { //chequear si hay datos almacenados en EEPROM
     int cantidadMacetas = cantidadDeMacetas();
     int cantLitrosMacetas = litrosMacetas();
     int etapaPlanta = etapaDePlanta();
@@ -161,17 +165,17 @@ void loop() {
     mostrar(cantidadMacetas, cantLitrosMacetas, etapaPlanta);
     setearValores();
   }
-/**********MUESTRO VALORES AL INICIAR***********/
+  /**********MUESTRO VALORES AL INICIAR***********/
   if (mostrarTempHumInicialState == false) {
     mostrarTempHumInicial();
   }
   /*****************BUCLE CORE*****************/
   checkTemp();
   checkHum();
-  if (contadorChequearTierra == 10) {
+  if (contadorChequearTierra == 1) {
     checkTierra();
   }
   contadorChequearTierra++;
 
-  
+
 }
